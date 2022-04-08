@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Workouts{% endblock title %}
+
+{% block content %}
+
+{% include "workouts/navigation.html" %}
+
+<h1>Workouts</h1>
+<form action="{% url "workouts" %}" method="POST">
+    {% csrf_token %}
+    {% for form_field in workout_form %}
+        <div class="form-control {% if form_field.errors %}invalid{% endif %}">
+            {{ form_field.label_tag }}
+            {{ form_field }}
+            {{ form_field.errors }}
+        </div>
+    {% endfor %}
+        <button>New Workout</button>
+</form>
+
+<ul>
+    {% for workout in workouts %}
+        <li><a href="{% url 'workout-detail' workout.id %}">{{ workout.name }} - {{ workout.movement }}</a></li>
+    {% endfor %}
+</ul>
+
+{% endblock content %}

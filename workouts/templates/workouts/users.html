@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Users{% endblock title %}
+
+{% block content %}
+
+{% include "workouts/navigation.html" %}
+
+<h1>Users</h1>
+<form action="{% url "users" %}" method="POST">
+    {% csrf_token %}
+    {% for form_field in user_form %}
+        <div class="form-control {% if form_field.errors %}invalid{% endif %}">
+            {{ form_field.label_tag }}
+            {{ form_field }}
+            {{ form_field.errors }}
+        </div>
+    {% endfor %}
+        <button>New User</button>
+</form>
+
+<ul>
+    {% for user in users %}
+        <li><a href="">@{{ user.username }}</a></li>
+    {% endfor %}
+</ul>
+
+{% endblock content %}

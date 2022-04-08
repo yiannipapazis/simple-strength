@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock title %}
+
+{% block content %}
+
+{% include "workouts/navigation.html" %}
+
+<section> 
+    <a href="{% url 'workouts' %}">Back to Workouts</a>
+</section>
+<h1>{{ workout.name }}</h1>
+<h2><a href="{% url 'movement-detail' workout.movement.id %}">{{ workout.movement }}</a></h2>
+<form action="{% url 'workout-delete' workout.id %}" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Delete">
+</form>
+<section>
+    <h3>Phases</h3>
+    <ul>
+        {% for phase in phases %}
+            <li>
+                <a href="{{ phase.get_absolute_url }}">{{ phase }} {{ phase.order }}</a>
+                <form action="{% url 'phase-delete' phase.id %}" method="POST">
+                    {% csrf_token %}
+                    <button>Delete</button>
+                </form>
+                    <button>Edit</button>
+                <form action=" {% url 'phase-move' id=phase.id amount=1 %}" method="POST">
+                    {% csrf_token %}
+                    <button>Move Up</button>
+                </form>
+                <button>Move Down</button>
+            </li>
+        {% endfor %}
+    </ul>
+<form action="{% url 'workout-newphase' workout.id %}" method="POST">
+    {% csrf_token %}
+    {% for form_field in phase_form %}
+        <div class="form-control">
+            {{ form_field.label_tag }}
+            {{ form_field }}
+            {{ form_field.errors }}
+        </div>
+    {% endfor %}
+    <button>New Phase</button>
+</form>
+</section>
+
+{% endblock content %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Movements{% endblock title %}
+
+{% block content %}
+
+{% include "workouts/navigation.html" %}
+
+<h1>Movements</h1>
+<form action="{% url "movements" %}" method="POST">
+    {% csrf_token %}
+    {% for form_field in movement_form %}
+        <div class="form-control {% if form_field.errors %}invalid{% endif %}">
+            {{ form_field.label_tag }}
+            {{ form_field }}
+            {{ form_field.errors }}
+        </div>
+    {% endfor %}
+        <button>New Movement</button>
+</form>
+
+<ul>
+    {% for movement in movements %}
+        <li><a href="{% url 'movement-detail' movement.id %}">{{ movement.name }}</a></li>
+    {% endfor %}
+</ul>
+
+{% endblock content %}

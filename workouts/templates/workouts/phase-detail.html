@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% include "workouts/navigation.html" %}
+
+{% block title %}{{ phase }}{% endblock title %}
+
+{% block content %}
+<h2><a href="{% url 'workout-detail' workout.id %}">{{ workout.name }}</a></h2>
+<h1>{{ phase }}</h1>
+<form action="{% url 'phase-delete' phase.id %}" method="POST">
+    {% csrf_token %}
+    <button>Delete</button>
+</form>
+<ul>
+    {% for set in sets %}
+        <li>
+            {{ set.name }} - {{ set.notes }} - {{set.sets}}x{{set.reps}} - 
+                {% if set.intensity_type == 'RPE' %}
+                    RPE{{ set.rpe }} 
+                {% else %}
+                    {{ set.percentage }}%
+                {% endif %}
+                
+                <form action="">
+                    <button>Edit</button>
+                </form>
+                <form action="{% url 'set-delete' set.id %}" method="POST">
+                    {% csrf_token %}
+                    <button>Delete</button>
+                </form>
+        </li>
+    {% endfor %}
+</ul>
+
+<form action="{% url 'phase-detail-newset' workout.id phase.id setgroup.id %}" method="POST">
+    {% csrf_token %}
+    {% for form_field in setform %}
+        <div class="form-control">
+            {{ form_field.label_tag }}
+            {{ form_field }}
+            {{ form_field.errors }}    
+        </div>
+    {% endfor %}
+    <button>Add Set</button>
+</form>
+
+{% endblock content %}

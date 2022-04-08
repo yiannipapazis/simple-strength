@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ movement.name }}{% endblock title %}
+
+{% block content %}
+
+{% include "workouts/navigation.html" %}
+
+<h1>{{ movement.name }}</h1>
+<ul>
+    {% for workout in workouts %}
+        <li><a href="{% url 'workout-detail' workout.id %}">{{ workout.name }}</a></li>
+    {% endfor %}
+</ul>
+<form action="{% url 'movement-delete' movement.id %}" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Delete">
+</form>
+{% endblock content %}
